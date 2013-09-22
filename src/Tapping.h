@@ -34,6 +34,12 @@ public:
 	// double m_pitch;	        // typically mm/rev - read from tool parameter
 	double m_depth;         // length of thread below x/y/z
 
+private:
+	double m_clearance_height; // The tool moves to this height between drill locations and then rapidly moves down to the m_standoff height.
+public:
+	double ClearanceHeight() const;
+	void   ClearanceHeight(const double value) { m_clearance_height = value; }
+
 	// The following line is the prototype setup in the Python routines for the tap sequence.
         // def tap(x=None, y=None, z=None, zretract=None, depth=None, standoff=None, dwell_bottom=None, pitch=None, stoppos=None, spin_in=None, spin_out=None):
 

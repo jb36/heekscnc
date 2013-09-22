@@ -14,6 +14,7 @@
 #include "interface/PropertyDouble.h"
 #include "interface/PropertyLength.h"
 #include "interface/PropertyChoice.h"
+#include "interface/PropertyString.h"
 #include "tinyxml/tinyxml.h"
 #include "Operations.h"
 #include "CTool.h"
@@ -39,6 +40,7 @@ void CTappingParams::set_initial_values( const double depth, const int tool_numb
 	config.Read(_T("m_depth"), &m_depth, 25.4/2);		// half an inch
 	config.Read(_T("m_sort_tapping_locations"), &m_sort_tapping_locations, 1);
 	config.Read(_T("m_tap_mode"), &m_tap_mode, 0);    // 0 -> rigid tap mode, 1 -> chuck tapping
+	config.Read(_T("m_clearance_height"), &m_clearance_height, 25.4);
 
 	if (depth > 0)
 	{
@@ -59,6 +61,7 @@ void CTappingParams::write_values_to_config()
 	config.Write(_T("m_depth"), m_depth);
 	config.Write(_T("m_sort_tapping_locations"), m_sort_tapping_locations);
 	config.Write(_T("m_tap_mode"), m_tap_mode);
+	config.Write(_T("m_clearance_height"), m_clearance_height);
 }
 
 static void on_set_mode(int value, HeeksObj* object)
@@ -94,6 +97,13 @@ static void on_set_sort_tapping_locations(int value, HeeksObj* object)
 }
 
 
+static void on_set_clearance_height(double value, HeeksObj* object)
+{
+	((CTapping*)object)->m_params.ClearanceHeight( value );
+	((CTapping*)object)->m_params.write_values_to_config();
+}
+
+
 void CTappingParams::GetProperties(CTapping* parent, std::list<Property *> *list)
 {
 	{ // Begin choice scope
@@ -108,6 +118,22 @@ void CTappingParams::GetProperties(CTapping* parent, std::list<Property *> *list
 	} // End choice scope
 
 	list->push_back(new PropertyLength(_("standoff"), m_standoff, parent, on_set_standoff));
+
+	switch(theApp.m_program->m_clearance_source)
+	{
+	case CProgram::eClearanceDefinedByFixture:
+		list->push_back(new PropertyString(_("clearance height"), _("Defined in fixture definition"), NULL, NULL));
+		break;
+
+	case CProgram::eClearanceDefinedByMachine:
+		list->push_back(new PropertyString(_("clearance height"), _("Defined in Program properties for whole machine"), NULL, NULL));
+		break;
+
+	case CProgram::eClearanceDefinedByOperation:
+	default:
+		list->push_back(new PropertyLength(_("clearance height"), m_clearance_height, parent, on_set_clearance_height));
+	} // End switch
+
 	list->push_back(new PropertyDouble(_("dwell"), m_dwell, parent, on_set_dwell));
 	list->push_back(new PropertyLength(_("depth"), m_depth, parent, on_set_depth));
 	//	list->push_back(new PropertyLength(_("pitch"), m_pitch, parent, on_set_pitch));
@@ -134,15 +160,18 @@ void CTappingParams::WriteXMLAttributes(TiXmlNode *root)
 	element->SetDoubleAttribute( "depth", m_depth);
 	element->SetAttribute( "sort_tapping_locations", m_sort_tapping_locations);
 	element->SetAttribute( "tap_mode", m_tap_mode);
+	element->SetAttribute( "clearance_height", m_clearance_height);
 }
 
 void CTappingParams::ReadParametersFromXMLElement(TiXmlElement* pElem)
 {
 	if (pElem->Attribute("standoff")) pElem->Attribute("standoff", &m_standoff);
+	m_clearance_height = m_standoff;  // Default if the clearance_height parameter is not found.
 	if (pElem->Attribute("dwell")) pElem->Attribute("dwell", &m_dwell);
 	if (pElem->Attribute("depth")) pElem->Attribute("depth", &m_depth);
 	if (pElem->Attribute("sort_tapping_locations")) pElem->Attribute("sort_tapping_locations", &m_sort_tapping_locations);
 	if (pElem->Attribute("tap_mode")) pElem->Attribute("tap_mode", &m_tap_mode);
+	if (pElem->Attribute("clearance_height")) pElem->Attribute("clearance_height", &m_clearance_height);
 }
 
 const wxBitmap &CTapping::GetIcon()
@@ -189,7 +218,8 @@ Python CTapping::AppendTextToProgram( CMachineState *pMachineState )
 		       << _T("depth=") << m_params.m_depth/theApp.m_program->m_units << _T(", ")
 		       << _T("standoff=") << m_params.m_standoff/theApp.m_program->m_units << _T(", ")
 		       << _T("direction=") << direction << _T(", ") // needed for ISO G84/G74
-		       << _T("pitch=") << pitch/theApp.m_program->m_units // _T(", ")
+		       << _T("pitch=") << pitch/theApp.m_program->m_units << _T(", ")
+                       << _T("clearance_height=") << m_params.ClearanceHeight()
 		       << _T(")\n");
 
 	        pMachineState->Location(point); // Remember where we are.
@@ -715,6 +745,7 @@ bool CTappingParams::operator==( const CTappingParams & rhs) const
 	if (m_depth != rhs.m_depth) return(false);
 	if (m_sort_tapping_locations != rhs.m_sort_tapping_locations) return(false);
 	if (m_tap_mode != rhs.m_tap_mode) return(false);
+	if (m_clearance_height != rhs.m_clearance_height) return(false);
 
 	return(true);
 }
@@ -726,3 +757,23 @@ bool CTapping::operator==( const CTapping & rhs ) const
 
 	return(CSpeedOp::operator==(rhs));
 }
+
+double CTappingParams::ClearanceHeight() const
+{
+	switch (theApp.m_program->m_clearance_source)
+	{
+	case CProgram::eClearanceDefinedByMachine:
+		return(theApp.m_program->m_machine.m_clearance_height);
+
+	case CProgram::eClearanceDefinedByFixture:
+		// We need to figure out which is the 'active' fixture and return
+		// the clearance height from that fixture.
+		// This should not occur.  In any case, use the clearance value from the individual operation.
+		return(m_clearance_height);
+
+	case CProgram::eClearanceDefinedByOperation:
+	default:
+		return(m_clearance_height);
+	} // End switch
+}
+

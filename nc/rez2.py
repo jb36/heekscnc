@@ -492,7 +492,7 @@ class Creator(nc.Creator):
 	# revert it.  I must set the mode so that I can be sure the values I'm passing in make
 	# sense to the end-machine.
 	#
-    def drill(self, x=None, y=None, z=None, depth=None, standoff=None, dwell=None, peck_depth=None,retract_mode=None, spindle_mode=None):
+    def drill(self, x=None, y=None, z=None, depth=None, standoff=None, dwell=None, peck_depth=None,retract_mode=None, spindle_mode=None, clearance_height=None):
 	if (standoff == None):
 		# This is a bad thing.  All the drilling cycles need a retraction (and starting) height.
 		return
@@ -540,7 +540,7 @@ class Creator(nc.Creator):
 #        pass
 
     # argument list adapted for compatibility with Tapping module
-    def tap(self, x=None, y=None, z=None, zretract=None, depth=None, standoff=None, dwell_bottom=None, pitch=None, stoppos=None, spin_in=None, spin_out=None, tap_mode=None, direction=None):
+    def tap(self, x=None, y=None, z=None, zretract=None, depth=None, standoff=None, dwell_bottom=None, pitch=None, stoppos=None, spin_in=None, spin_out=None, tap_mode=None, direction=None, clearance_height=None):
         pass
 
     def bore(self, x=None, y=None, z=None, zretract=None, depth=None, standoff=None, dwell_bottom=None, feed_in=None, feed_out=None, stoppos=None, shift_back=None, shift_right=None, backbore=False, stop=False):

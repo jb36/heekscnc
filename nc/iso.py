@@ -764,7 +764,7 @@ class Creator(nc.Creator):
     # revert it.  I must set the mode so that I can be sure the values I'm passing in make
     # sense to the end-machine.
     #
-    def drill(self, x=None, y=None, z=None, depth=None, standoff=None, dwell=None, peck_depth=None, retract_mode=None, spindle_mode=None):
+    def drill(self, x=None, y=None, z=None, depth=None, standoff=None, dwell=None, peck_depth=None, retract_mode=None, spindle_mode=None, clearance_height=None):
         if (standoff == None):        
         # This is a bad thing.  All the drilling cycles need a retraction (and starting) height.        
             return
@@ -799,7 +799,10 @@ class Creator(nc.Creator):
                 first = False
                 
             # we should pass clearance height into here, but my machine is on and I'm in a hurry... 22nd June 2011 danheeks
-            self.rapid(z = z + 5.0)
+            if (clearance_height == None):
+                self.rapid(z = z + 5.0)
+            else:
+                self.rapid(z = z + clearance_height)
             
             return
 
@@ -879,7 +882,7 @@ class Creator(nc.Creator):
     # G33.1 tapping with EMC for now
     # unsynchronized (chuck) taps NIY (tap_mode = 1)
     
-    def tap(self, x=None, y=None, z=None, zretract=None, depth=None, standoff=None, dwell_bottom=None, pitch=None, stoppos=None, spin_in=None, spin_out=None, tap_mode=None, direction=None):
+    def tap(self, x=None, y=None, z=None, zretract=None, depth=None, standoff=None, dwell_bottom=None, pitch=None, stoppos=None, spin_in=None, spin_out=None, tap_mode=None, direction=None, clearance_height=None):
         # mystery parameters: 
         # zretract=None, dwell_bottom=None,pitch=None, stoppos=None, spin_in=None, spin_out=None):
         # I dont see how to map these to EMC Gcode
