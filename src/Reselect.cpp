@@ -8,6 +8,47 @@
 #include "interface/PropertyInt.h"
 #include "interface/ObjList.h"
 
+static bool GetSymbols(std::list< std::pair<int,unsigned int> >& symbols )
+{
+	// check for at least one sketch selected
+	const std::list<HeeksObj*>& list = heeksCAD->GetMarkedList();
+	for(std::list<HeeksObj*>::const_iterator It = list.begin(); It != list.end(); It++)
+	{
+		HeeksObj* object = *It;
+		if(object->GetIDGroupType() == SketchType)
+		{
+                  symbols.push_back(std::make_pair(object->GetType(), object->m_id));
+		}
+	}
+
+	if(symbols.size() == 0)return false;
+
+	return true;
+}
+
+void ReselectSymbols::Run()
+{
+	std::list< std::pair<int,unsigned int> > symbols;
+	heeksCAD->PickObjects(_("Select Sketches"), MARKING_FILTER_SKETCH | MARKING_FILTER_CIRCLE | MARKING_FILTER_AREA);
+	if(GetSymbols( symbols ))
+	{
+		heeksCAD->CreateUndoPoint();
+		m_symbols->clear();
+		*m_symbols = symbols;
+		((ObjList*)m_object)->Clear();
+		m_object->ReloadPointers();
+		heeksCAD->Changed();
+	}
+	else
+	{
+		wxMessageBox(_("Select cancelled. No sketches were selected!"));
+	}
+
+	// get back to the operation's properties
+	heeksCAD->ClearMarkedList();
+	heeksCAD->Mark(m_object);
+}
+
 static bool GetSketches(std::list<int>& sketches )
 {
 	// check for at least one sketch selected
@@ -143,4 +184,3 @@ void AddSketchesProperties(std::list<Property *> *list, const std::list<int> &sk
 	else if(sketches.size() == 1)list->push_back(new PropertyInt(_("sketch id"), sketches.front(), NULL));
 	else list->push_back(new PropertyString(_("sketches"), GetIntListString(sketches), NULL));
 }
-

@@ -4,6 +4,18 @@
 
 #include "interface/Tool.h"
 
+class ReselectSymbols: public Tool{
+public:
+        std::list< std::pair<int,unsigned int> > *m_symbols;
+	HeeksObj* m_object;
+	ReselectSymbols(): m_symbols(NULL), m_object(NULL){}
+
+	// Tool's virtual functions
+	const wxChar* GetTitle(){return _("Re-select sketches");}
+	void Run();
+	wxString BitmapPath(){ return _T("selsketch");}
+};
+
 class ReselectSketches: public Tool{
 public:
 	std::list<int> *m_sketches;

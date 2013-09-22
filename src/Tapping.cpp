@@ -20,6 +20,7 @@
 #include "CTool.h"
 #include "Profile.h"
 #include "CNCPoint.h"
+#include "Reselect.h"
 #include "MachineState.h"
 #include "Program.h"
 
@@ -731,10 +732,14 @@ std::list<wxString> CTapping::DesignRulesAdjustment(const bool apply_changes)
     }
 }
 
+static ReselectSymbols reselect_symbols;
 
 void CTapping::GetTools(std::list<Tool*>* t_list, const wxPoint* p)
 {
     CSpeedOp::GetTools( t_list, p );
+    reselect_symbols.m_symbols = &m_symbols;
+    reselect_symbols.m_object = this;
+    t_list->push_back(&reselect_symbols);
 }
 
 
