@@ -2,8 +2,8 @@
 # This code modified from iso.py and emc2.py distriuted with HeeksCAD as of Sep 2010
 # Kurt Jensen 6 Sep 2010
 # Use at your own risk.
-import nc
-import iso
+from . import nc
+from . import iso
 
 class Creator(iso.Creator):
     def init(self): 

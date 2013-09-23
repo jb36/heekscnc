@@ -6,7 +6,7 @@
 # Dan Falck 2010/09/28
 
 import iso_lathe_codes as iso
-import nc
+from . import nc
 import math
 
 ################################################################################
@@ -458,7 +458,7 @@ class CreatorIso(nc.Creator):
     def start_CRC(self, left = True, radius = 0.0):
         # set up prep code, to be output on next line
         if self.t == None:
-            raise "No tool specified for start_CRC()"
+            raise Exception("No tool specified for start_CRC()")
         self.g = ('G41' + iso.codes.SPACE() + 'D%i') % self.t
 
     def end_CRC(self):

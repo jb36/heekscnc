@@ -4,10 +4,10 @@
 # NC code creator for attaching Z coordinates to a surface
 #
 
-import recreator
+from . import recreator
 import ocl
 import ocl_funcs
-import nc
+from . import nc
 
 attached = False
 

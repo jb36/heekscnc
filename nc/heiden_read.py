@@ -4,7 +4,7 @@
 # Simple ISO NC code parsing
 #
 
-import nc_read as nc
+from . import nc_read as nc
 import re
 import sys
 import math

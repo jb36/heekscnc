@@ -6,7 +6,7 @@
 #
 # Hirutso Enni, 2009-01-13
 
-import nc
+from . import nc
 import math
 import circular_pocket as circular
 
@@ -252,13 +252,13 @@ class Creator(nc.Creator):
         if (x == None):
 	   if (y == None):
 	      return
-	print 'rychlopsuv'
-	print x
-	print y
-	print z
-	print a
-	print b
-	print c
+	print('rychlopsuv')
+	print(x)
+	print(y)
+	print(z)
+	print(a)
+	print(b)
+	print(c)
 	self.write('PL_OFF\n')
 	self.write('PARK\n')
 	self.write('FS\n')
@@ -300,10 +300,10 @@ class Creator(nc.Creator):
 	  if (y == None):
 	      return
 
-	print 'MA rez'
-	print x
-	print y
-	print z
+	print('MA rez')
+	print(x)
+	print(y)
+	print(z)
 	#self.write_blocknum()
         #self.write(iso.FEED)
         #self.write_preps()
@@ -352,14 +352,14 @@ class Creator(nc.Creator):
 	  if (y == None):
 	      return
       #self.write_blocknum()
-	print 'ARC rez'
-	print x
-	print y
-	print z
-	print i
-	print j
-	print k
-	print r
+	print('ARC rez')
+	print(x)
+	print(y)
+	print(z)
+	print(i)
+	print(j)
+	print(k)
+	print(r)
 	self.write('C  ')
       #  if cw: self.write(iso.ARC_CW)
       #  else: self.write(iso.ARC_CCW)
@@ -406,8 +406,8 @@ class Creator(nc.Creator):
 	#r=math.sqrt((i*i)+(j*j))
 	ratio=ssucin/(r*r)
 	angle= math.acos(ratio) * 180 / math.pi
-	print 'angle' 
-	print angle
+	print('angle')
+	print(angle)
 #	while(angle>=90.0001):
 #	  if(cw): self.write((' -90.0000\n' ))
 #	  else: self.write((' 90.0000\n'))

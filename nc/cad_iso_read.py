@@ -11,7 +11,7 @@
 """
 
 
-import cad_nc_read as nc
+from . import cad_nc_read as nc
 import re
 import sys
 

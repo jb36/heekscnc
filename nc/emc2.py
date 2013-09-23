@@ -1,5 +1,5 @@
-import nc
-import iso
+from . import nc
+from . import iso
 import math
 
 class Creator(iso.Creator):
@@ -288,7 +288,7 @@ class Creator(iso.Creator):
 		
 	def start_CRC(self, left = True, radius = 0.0):
 		if self.t == None:
-			raise "No tool specified for start_CRC()"
+			raise Exception("No tool specified for start_CRC()")
 		self.write_blocknum()
 		if left:
 			self.write(('G41' + self.SPACE() + 'D%i') % self.t  + '\t (start left cutter radius compensation)\n' )
@@ -339,9 +339,9 @@ class Creator(iso.Creator):
 		
 		if (peck_depth != 0):
 			if spindle_mode == 1:
-				raise "cannot stop spindle at bottom while peck drilling"				 
+				raise Exception("cannot stop spindle at bottom while peck drilling")
 			if retract_mode == 1:
-				raise "cannot feed retract while peck drilling" 
+				raise Exception("cannot feed retract while peck drilling")
 			
 			# We're pecking.  Let's find a tree. 
 			if self.drill_modal:	   

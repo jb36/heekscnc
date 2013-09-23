@@ -6,8 +6,8 @@
 
 # This is the same as the hpgl2d machine, but uses units of 0.25mm instead of 0.01mm
 
-import nc
-import hpgl2d
+from . import nc
+from . import hpgl2d
 
 class Creator(hpgl2d.Creator):
     def init(self): 

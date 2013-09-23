@@ -1,5 +1,5 @@
-import nc
-import emc2
+from . import nc
+from . import emc2
 
 class Creator(emc2.Creator):
 	def init(self): 

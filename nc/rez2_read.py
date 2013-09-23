@@ -3,7 +3,7 @@
 # iso_.py
 #
 
-import nc_read as nc
+from . import nc_read as nc
 import re
 import sys
 import math
@@ -84,7 +84,7 @@ class Parser(nc.Parser):
 	    #print self.line 
 	    #print ' AAAA '
 	    words[0]=words[0]+self.SPACE
-	    print words 
+	    print(words)
 	    for word in words:
                 col = None
 		#if (word[0] == 'A' or word[0] == 'a'):
@@ -276,7 +276,7 @@ class Parser(nc.Parser):
 		  #print eval(words[2])-self.startx
 		  #print eval(words[6])-self.starty
 		  #self.add_arc(self.endx, self.endy, 0.0000, eval(words[1])-self.startx, eval(words[3])-self.starty, 0.0000, arc)
-		  print arc
+		  print(arc)
 		  self.add_arc(self.endx, self.endy, 0.0000,eval(words[1])-self.startx, eval(words[3])-self.starty, 0.0000,0.0000, arc)
 		
 		  #self.add_arc(self.x, self.y, 0.0000, self.i, self.j, 0.0000, arc)

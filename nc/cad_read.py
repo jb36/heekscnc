@@ -8,7 +8,7 @@
     usage: python cad_read.py temp.nc temp.scr
 """
 
-import cad_iso_read as iso
+from . import cad_iso_read as iso
 import sys
 
 

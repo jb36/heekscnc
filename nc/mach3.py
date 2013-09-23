@@ -1,5 +1,5 @@
-import nc
-import iso
+from . import nc
+from . import iso
 
 class Creator(iso.Creator):
 	def init(self): 

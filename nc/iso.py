@@ -5,10 +5,10 @@
 #
 # Hirutso Enni, 2009-01-13
 
-import nc
+from . import nc
 import math
-from format import Format
-from format import *
+from .format import Format
+from .format import *
 
 ################################################################################
 class Creator(nc.Creator):
@@ -723,7 +723,7 @@ class Creator(nc.Creator):
     def start_CRC(self, left = True, radius = 0.0):
         # set up prep code, to be output on next line
         if self.t == None:
-            raise "No tool specified for start_CRC()"
+            raise Exception("No tool specified for start_CRC()")
         self.write_blocknum()
         if left:
             self.write(self.SPACE() + 'G41')
@@ -898,7 +898,7 @@ class Creator(nc.Creator):
                 return	# We need a direction value.
 
         if (tap_mode != 0):
-                raise "only rigid tapping currently supported"
+                raise Exception("only rigid tapping currently supported")
 
         self.write_preps()
         self.write_blocknum()

@@ -1,6 +1,6 @@
-import nc
-import iso_codes
-import emc2
+from . import nc
+from . import iso_codes
+from . import emc2
 
 
 

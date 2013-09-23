@@ -1,7 +1,7 @@
-import nc
-import makerbot_codes as maker
+from . import nc
+from . import makerbot_codes as maker
 import datetime
-import iso_modal
+from . import iso_modal
 import math
 
 

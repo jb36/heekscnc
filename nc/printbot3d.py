@@ -3,8 +3,8 @@
 #
 # Dan Heeks 18th October 2010
 
-import nc
-import iso_modal
+from . import nc
+from . import iso_modal
 import math
 
 ################################################################################

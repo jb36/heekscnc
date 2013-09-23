@@ -4,7 +4,7 @@
 # This program is released under the BSD license. See the file COPYING for details.
 #
 
-import nc
+from . import nc
 import math
 
 class Creator(nc.Creator):

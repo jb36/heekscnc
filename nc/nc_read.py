@@ -153,11 +153,11 @@ class Parser:
                                 global count
                                 
                                 if count == 0 and x > 47:
-                                    print 'x = ', x
-                                    print 'p0 = ', p0.x, ', ', p0.y, '   p1 = ', p1.x, ', ', p1.y
-                                    print 'c = ', c.x, ', ', c.y
-                                    print 'v = ', v.x, ', ', v.y
-                                    print 'n = ', n.x, ', ', n.y
+                                    print('x = ', x)
+                                    print('p0 = ', p0.x, ', ', p0.y, '   p1 = ', p1.x, ', ', p1.y)
+                                    print('c = ', c.x, ', ', c.y)
+                                    print('v = ', v.x, ', ', v.y)
+                                    print('n = ', n.x, ', ', n.y)
                                     count += 1
 
                             else:

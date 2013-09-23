@@ -1,4 +1,4 @@
-import iso_read as iso
+from . import iso_read as iso
 import sys
 
 # just use the iso reader

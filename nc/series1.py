@@ -1,5 +1,5 @@
-import nc
-import iso_modal
+from . import nc
+from . import iso_modal
 import math
 
 ################################################################################

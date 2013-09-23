@@ -1,4 +1,4 @@
-import nc
+from . import nc
 
 units = 1.0
 
@@ -175,7 +175,7 @@ class Redirector(nc.Creator):
         
     def arc(self, x=None, y=None, z=None, i=None, j=None, k=None, r=None, ccw = True):
         if self.x == None or self.y == None or self.z == None:
-            raise "first attached move can't be an arc"
+            raise Exception("first attached move can't be an arc")
         px = self.x
         py = self.y
         pz = self.z

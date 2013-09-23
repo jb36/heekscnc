@@ -6,8 +6,8 @@
 #
 # Dan Falck, 7th March 2010
 
-import nc
-import iso_modal
+from . import nc
+from . import iso_modal
 import math
 
 import datetime

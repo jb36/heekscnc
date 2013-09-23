@@ -5,10 +5,10 @@
 #
 # Dan Heeks 26th April 2012
 
-import recreator
+from . import recreator
 dragging = False
 from kurve_funcs import cut_curve as cut_curve
-import nc
+from . import nc
 import area
 
 ################################################################################
@@ -23,7 +23,7 @@ class Creator(recreator.Redirector):
     def cut_path(self):
         if self.path == None: return
 
-        print self.drag_distance
+        print(self.drag_distance)
         self.path.OffsetForward(self.drag_distance, False)
         
         nc.creator = nc.creator.original

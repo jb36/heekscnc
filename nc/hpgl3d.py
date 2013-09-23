@@ -4,8 +4,8 @@
 # This program is released under the BSD license. See the file COPYING for details.
 #
 
-import nc
-import hpgl2d
+from . import nc
+from . import hpgl2d
 import math
 
 class Creator(hpgl2d.Creator):

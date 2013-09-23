@@ -5,8 +5,8 @@
 #
 # Dan Heeks, 4th May 2010
 
-import nc
-import iso
+from . import nc
+from . import iso
 import math
 
 ################################################################################

@@ -1,4 +1,4 @@
-import nc_read as nc
+from . import nc_read as nc
 import sys
 import math
 
