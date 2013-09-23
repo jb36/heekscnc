@@ -23,10 +23,11 @@ public:
 	wxString m_title;
 	int m_tool_number;	// joins the m_tool_number in one of the CTool objects in the tools list.
 	int m_operation_type; // Type of operation (because GetType() overloading does not allow this class to call the parent's method)
+        int m_coolant; // 0 = no coolant, 1 = mist, 2 = flood
 
-	COp(const wxString& title, const int tool_number = 0, const int operation_type = UnknownType )
+ COp(const wxString& title, const int tool_number = 0, const int operation_type = UnknownType, const int coolant = 0 )
             :m_active(true), m_title(title), m_tool_number(tool_number),
-            m_operation_type(operation_type)
+          m_operation_type(operation_type), m_coolant(coolant)
     {
         ReadDefaultValues();
     }

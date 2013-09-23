@@ -46,6 +46,7 @@ void COp::WriteBaseXML(TiXmlElement *element)
 	element->SetAttribute( "active", m_active);
 	element->SetAttribute( "title", m_title.utf8_str());
 	element->SetAttribute( "tool_number", m_tool_number);
+	element->SetAttribute( "coolant", m_coolant);
 
 	ObjList::WriteBaseXML(element);
 }
@@ -87,6 +88,15 @@ void COp::ReadBaseXML(TiXmlElement* element)
         } // End if - else
 	} // End if - else
 
+	if (element->Attribute("coolant") != NULL)
+	{
+		m_coolant = atoi(element->Attribute("coolant"));
+	} // End if - then
+        else
+        {
+            m_coolant = 0;
+        } // End if - else
+
 	ObjList::ReadBaseXML(element);
 }
 
@@ -102,6 +112,18 @@ static void on_set_tool_number(int zero_based_choice, HeeksObj* object)
 	if ((zero_based_choice >= int(0)) && (zero_based_choice <= int(tools.size()-1)))
 	{
                 ((COp *)object)->m_tool_number = tools[zero_based_choice].first;	// Convert the choice offset to the tool number for that choice
+	} // End if - then
+
+	((COp*)object)->WriteDefaultValues();
+
+} // End on_set_tool_number() routine
+
+static void on_set_coolant(int zero_based_choice, HeeksObj* object)
+{
+	if (zero_based_choice < 0) return;	// An error has occured.
+	if ((zero_based_choice >= 0) && (zero_based_choice <= 2))
+	{
+                ((COp *)object)->m_coolant = zero_based_choice;
 	} // End if - then
 
 	((COp*)object)->WriteDefaultValues();
@@ -131,6 +153,14 @@ void COp::GetProperties(std::list<Property *> *list)
 
 		list->push_back(new PropertyChoice(_("tool"), choices, choice, this, on_set_tool_number));
 	}
+        
+        {
+          std::list< wxString > choices;
+          choices.push_back(_("None"));
+          choices.push_back(_("Mist"));
+          choices.push_back(_("Flood"));
+          list->push_back(new PropertyChoice(_("coolant"), choices, m_coolant, this, on_set_coolant));
+        }
 
 	ObjList::GetProperties(list);
 }
@@ -159,6 +189,7 @@ COp & COp::operator= ( const COp & rhs )
 		m_active = rhs.m_active;
 		m_title = rhs.m_title;
 		m_tool_number = rhs.m_tool_number;
+                m_coolant = rhs.m_coolant;
 		m_operation_type = rhs.m_operation_type;
 	}
 
@@ -182,6 +213,7 @@ void COp::WriteDefaultValues()
 {
 	CNCConfig config(GetTypeString());
 	config.Write(_T("Tool"), m_tool_number);
+	config.Write(_T("Coolant"), m_coolant);
 }
 
 void COp::ReadDefaultValues()
@@ -255,6 +287,8 @@ void COp::ReadDefaultValues()
 		}
 		config.Read(_T("Tool"), &m_tool_number, default_tool);
 	} // End if - then
+
+	if (m_coolant <= 0) m_coolant = 0;
 }
 
 /**
@@ -269,7 +303,9 @@ Python COp::AppendTextToProgram(CMachineState *pMachineState )
 		python << _T("comment(") << PythonString(m_comment) << _T(")\n");
 	}
 
-	if(UsesTool())python << MACHINE_STATE_TOOL(m_tool_number);  // Select the correct  tool.
+	if(UsesTool())python << MACHINE_STATE_TOOL(m_tool_number);  // Select the correct tool.
+
+        python << _T("coolant(mode=") << m_coolant << _T(")\n");
 
 	return(python);
 }
@@ -291,6 +327,7 @@ bool COp::operator==(const COp & rhs) const
 	if (m_title != rhs.m_title) return(false);
 	if (m_tool_number != rhs.m_tool_number) return(false);
 	if (m_operation_type != rhs.m_operation_type) return(false);
+        if (m_coolant != rhs.m_coolant) return(false);
 
 	return(ObjList::operator==(rhs));
 }
