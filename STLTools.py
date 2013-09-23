@@ -83,7 +83,7 @@ class reader:
                 fl.read(2) # padding
                 nfacets += 1
             
-            except struct.error, e:
+            except struct.error as e:
                 break
         
         if self.nfacets != nfacets:
@@ -123,7 +123,7 @@ class writer:
     def write(self, fc):
         self.fl = open(self.fn, "w")
         self.WriteHeader(self.fl, fc.nfacets)
-        for t in xrange(fc.nfacets):
+        for t in range(fc.nfacets):
             x0, y0, z0, x1, y1, z1, x2, y2, z2 = fc.GetFacet(t)
             self.WriteFacet(x0, y0, z0, x1, y1, z1, x2, y2, z2)
             
@@ -262,15 +262,15 @@ class converter(reader):
 # stltools --tk does the following.
 # stltools --in=file.stl --stats prints bounding box etc.
 if __name__ == '__main__':
-    import tkFileDialog
-    fin = tkFileDialog.askopenfilename(
+    import tkinter.FileDialog
+    fin = tkinter.FileDialog.askopenfilename(
                 defaultextension = '*.stl',
                 filetypes = [('Stereolithography','*.stl'),('all files','*.*')],
                 title = "Open STL")
     a = converter(fin)
 
     t = a.isascii and "Save as STL (Binary format)" or "Save as STL (ASCII format)"
-    fout = tkFileDialog.asksaveasfilename(
+    fout = tkinter.FileDialog.asksaveasfilename(
                 defaultextension = '*.stl',
                 filetypes = [('Stereolithography','*.stl'),('all files','*.*')],
                 title = t)

@@ -235,7 +235,7 @@ def profile(curve, direction = "on", radius = 1.0, offset_extra = 0.0, roll_radi
         
     if direction != "on":
         if direction != "left" and direction != "right":
-            raise "direction must be left or right", direction
+            raise Exception("direction must be left or right", direction)
 
         # get tool diameter
         offset = radius + offset_extra
@@ -244,7 +244,7 @@ def profile(curve, direction = "on", radius = 1.0, offset_extra = 0.0, roll_radi
                 offset = -offset
             offset_success = offset_curve.Offset(offset)
             if offset_success == False:
-                raise Exception, "couldn't offset kurve " + str(offset_curve)
+                raise Exception("couldn't offset kurve " + str(offset_curve))
             
     # extend curve
     if extend_at_start > 0.0:
@@ -269,7 +269,7 @@ def profile(curve, direction = "on", radius = 1.0, offset_extra = 0.0, roll_radi
     tags = new_tags
 
     if offset_curve.getNumVertices() <= 1:
-        raise "sketch has no spans!"
+        raise Exception("sketch has no spans!")
 
     # do multiple depths
     layer_count = int((start_depth - final_depth) / stepdown)
@@ -304,7 +304,7 @@ def profile(curve, direction = "on", radius = 1.0, offset_extra = 0.0, roll_radi
         
         # get the tag depth at the start
         start_z = get_tag_z_for_span(0, offset_curve, radius, start_depth, depth, final_depth)
-        if start_z > mat_depth: mat_depth = start_z
+        if (start_z != None) and (start_z > mat_depth): mat_depth = start_z
 
         # rapid across to the start
         s = roll_on_curve.FirstVertex().p
@@ -320,7 +320,7 @@ def profile(curve, direction = "on", radius = 1.0, offset_extra = 0.0, roll_radi
         
         # feed down to depth
         mat_depth = depth
-        if start_z > mat_depth: mat_depth = start_z
+        if (start_z != None) and (start_z > mat_depth): mat_depth = start_z
         feed(z = mat_depth)
 
         if use_CRC():
