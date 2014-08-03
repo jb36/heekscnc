@@ -1422,6 +1422,7 @@ bool CTool::IsMillingToolType( CToolParams::eToolType type )
 	case CToolParams::eDrill:
 	case CToolParams::eCentreDrill:
 	case CToolParams::eChamfer:
+	case CToolParams::eTapTool:
 		return true;
 	default:
 		return false;
