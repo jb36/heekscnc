@@ -34,7 +34,7 @@
 #include <gp_Circ.hxx>
 #include <BRepTools.hxx>
 #include <BRep_Tool.hxx>
-#include <BRepMesh.hxx>
+#include <BRepMesh_IncrementalMesh.hxx>
 #include <Poly_Polygon3D.hxx>
 
 CScriptOp::CScriptOp( const CScriptOp & rhs ) : CDepthOp(rhs)
@@ -120,7 +120,7 @@ const wxBitmap &CScriptOp::GetIcon()
 
 			BRepTools::Clean(edge);
 			double max_deviation_for_spline_to_arc = 0.001;
-			BRepMesh::Mesh(edge, max_deviation_for_spline_to_arc);
+			BRepMesh_IncrementalMesh(edge, max_deviation_for_spline_to_arc);
 
 			TopLoc_Location L;
 			Handle(Poly_Polygon3D) Polyg = BRep_Tool::Polygon3D(edge, L);
